@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>تست شخصیت عشق ابدی</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #ffe6f0;
+    color: #333;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+  h1 {
+    text-align: center;
+    color: #c71585;
+  }
+  .question {
+    margin: 20px 0;
+  }
+  button {
+    background: #c71585;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  button:hover {
+    background: #a0106f;
+  }
+  .answer-btn {
+    display: block;
+    margin: 8px 0;
+    width: 100%;
+    text-align: right;
+  }
+  .result {
+    background: #fff0f6;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<h1>تست شخصیت عشق ابدی</h1>
+
+<div id="quiz-container">
+  <div id="question-container"></div>
+  <div id="answer-buttons" class="answer-btn"></div>
+  <button id="next-btn" style="display:none;">بعدی</button>
+</div>
+
+<div id="result" class="result" style="display:none;"></div>
+
+<script>
+const questions = [
+  {
+    question: "شما بیشتر چه کاری دوست داری انجام بدی؟",
+    answers: [
+      { text: "ورزش و فعالیت بدنی", value: "A" },
+      { text: "مطالعه و تفکر", value: "B" },
+      { text: "سرگرمی و جشن", value: "C" },
+      { text: "کارهای خلاقانه", value: "D" }
+    ]
+  },
+  {
+    question: "در مواجهه با مشکل چطور واکنش نشان می‌دهی؟",
+    answers: [
+      { text: "بی‌درنگ حل می‌کنم", value: "A" },
+      { text: "تحلیل می‌کنم و برنامه‌ریزی می‌کنم", value: "B" },
+      { text: "با دیگران مشورت می‌کنم", value: "C" },
+      { text: "صبر می‌کنم و منتظر می‌مونم", value: "D" }
+    ]
+  },
+  // بقیه سوالات همینطور ادامه دارد (برای کوتاه شدن فقط چندتا نوشته‌ام)
+  {
+    question: "کدام ویژگی شخصیتی بیشتر به تو نزدیک است؟",
+    answers: [
+      { text: "شجاع و پرانرژی", value: "A" },
+      { text: "آرام و منطقی", value: "B" },
+      { text: "خوش‌مشرب و اجتماعی", value: "C" },
+      { text: "خلاق و خیال‌پرداز", value: "D" }
+    ]
+  },
+  {
+    question: "در یک گروه دوست، نقش تو چیست؟",
+    answers: [
+      { text: "رهبر و تصمیم‌گیرنده", value: "A" },
+      { text: "مشاور و حامی", value: "B" },
+      { text: "سرگرم‌کننده و خوش‌برخورد", value: "C" },
+      { text: "خارجی و متفاوت", value: "D" }
+    ]
+  },
+  {
+    question: "کدام رنگ بیشتر تو را جذب می‌کند؟",
+    answers: [
+      { text: "قرمز", value: "A" },
+      { text: "آبی", value: "B" },
+      { text: "زرد", value: "C" },
+      { text: "بنفش", value: "D" }
+    ]
+  },
+  {
+    question: "در تعطیلات ترجیح می‌دهی چه کاری کنی؟",
+    answers: [
+      { text: "ورزش و ماجراجویی", value: "A" },
+      { text: "کتاب خواندن و آرامش", value: "B" },
+      { text: "دیدار دوستان", value: "C" },
+      { text: "هنر و خلاقیت", value: "D" }
+    ]
+  },
+  {
+    question: "در یک مسابقه چطور شرکت می‌کنی؟",
+    answers: [
+      { text: "تمام توانم رو می‌ذارم برای برد", value: "A" },
+      { text: "با دقت و استراتژی پیش می‌روم", value: "B" },
+      { text: "برای تفریح شرکت می‌کنم", value: "C" },
+      { text: "روش خودم رو دارم، متفاوت", value: "D" }
+    ]
+  },
+  {
+    question: "وقتی ناراحتی، معمولاً چیکار می‌کنی؟",
+    answers: [
+      { text: "فعالیت می‌کنم و فراموش می‌کنم", value: "A" },
+      { text: "درون‌گرا می‌شوم و فکر می‌کنم", value: "B" },
+      { text: "با دوستام حرف می‌زنم", value: "C" },
+      { text: "ذهنم را با خلاقیت مشغول می‌کنم", value: "D" }
+    ]
+  },
+  {
+    question: "بهترین توصیف از خودت چیست؟",
+    answers: [
+      { text: "پرشور و پرتلاش", value: "A" },
+      { text: "آرام و متفکر", value: "B" },
+      { text: "شاد و اجتماعی", value: "C" },
+      { text: "رویایی و خلاق", value: "D" }
+    ]
+  },
+  {
+    question: "دوست داری دیگران درباره تو چه چیزی بدونند؟",
+    answers: [
+      { text: "قوی و رهبر", value: "A" },
+      { text: "هوشمند و قابل اعتماد", value: "B" },
+      { text: "شاد و محبوب", value: "C" },
+      { text: "خاص و متفاوت", value: "D" }
+    ]
+  }
+];
+
+const characters = {
+  A: {
+    name: "شخصیت آریا",
+    description: "تو یک فرد پرانرژی و شجاع هستی، که همیشه آماده چالش‌ها و رقابت‌ها هستی."
+  },
+  B: {
+    name: "شخصیت سارا",
+    description: "تو فردی آرام و منطقی هستی که همیشه با تحلیل و فکر درست تصمیم می‌گیری."
+  },
+  C: {
+    name: "شخصیت کامران",
+    description: "تو خیلی اجتماعی و خوش‌برخورد هستی، دوست داری با دیگران باشی و همیشه لبخند بزنی."
+  },
+  D: {
+    name: "شخصیت نیلوفر",
+    description: "تو فردی خلاق و خیال‌پرداز هستی که دیدی متفاوت به دنیا داری."
+  }
+};
+
+let currentQuestionIndex = 0;
+let scores = { A: 0, B: 0, C: 0, D: 0 };
+
+const questionContainer = document.getElementById("question-container");
+const answerButtons = document.getElementById("answer-buttons");
+const nextBtn = document.getElementById("next-btn");
+const resultDiv = document.getElementById("result");
+
+function showQuestion() {
+  resetState();
+  const currentQuestion = questions[currentQuestionIndex];
+  questionContainer.innerText = currentQuestion.question;
+  
+  currentQuestion.answers.forEach(answer => {
+    const button = document.createElement("button");
+    button.innerText = answer.text;
+    button.classList.add("answer-btn");
+    button.addEventListener("click", () => selectAnswer(answer.value));
+    answerButtons.appendChild(button);
+  });
+}
+
+function resetState() {
+  nextBtn.style.display = "none";
+  answerButtons.innerHTML = "";
+}
+
+function selectAnswer(value) {
+  scores[value]++;
+  nextBtn.style.display = "inline-block";
+}
+
+nextBtn.addEventListener("click", () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < questions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult() {
+  questionContainer.style.display = "none";
+  answerButtons.style.display = "none";
+  nextBtn.style.display = "none";
+
+  let maxScore = 0;
+  let finalCharacter = null;
+  for (const key in scores) {
+    if (scores[key] > maxScore) {
+      maxScore = scores[key];
+      finalCharacter = characters[key];
+    }
+  }
+
+  resultDiv.style.display = "block";
+  if (finalCharacter) {
+    resultDiv.innerHTML = `<h2>شخصیت شما: ${finalCharacter.name}</h2><p>${finalCharacter.description}</p>`;
+  } else {
+    resultDiv.innerText = "نتوانستیم شخصیت شما را تشخیص دهیم.";
+  }
+}
+
+// شروع تست
+showQuestion();
+</script>
+
+</body>
+</html>
